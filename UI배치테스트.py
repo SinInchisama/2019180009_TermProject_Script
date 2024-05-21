@@ -10,7 +10,7 @@ Window.geometry("800x800")
 
 Note = Notebook(Window)
 Note.place(x=10, y=10, width=780, height=780)
-'''
+
 Frame1 = Frame(Note, width=780, height=780)
 Note.add(Frame1,text = " 검색 ")
 
@@ -59,7 +59,7 @@ Map_Canvas = Canvas(Frame1, width=360, height=320,bg = "blue")
 Map_Canvas.place(x=400,y= 20)
 
 
-'''
+
 
 # Frame2 세부정보창에 대한 프레임
 
@@ -70,5 +70,35 @@ Note.add(Frame2,text = " 정보 ")
 
 Scrolled_Transport = ScrolledText(Frame2,width=40,height=25)
 Scrolled_Transport.place(x= 10 ,y=20)
+
+
+# 교통 시설 선택 버튼
+Select_Transport_Button = Button(Frame2,text = " 선택 ")
+Select_Transport_Button.place(x=350,y=40,width=100, height=80)
+
+
+# 텔레그램 선택 버튼
+Select_Telegram_Button = Button(Frame2,text = " 텔레그램 ")
+Select_Telegram_Button.place(x=350,y=140,width=100, height=80)
+
+
+# 메일 선택 버튼
+Select_Telegram_Button = Button(Frame2,text = " 메일 ")
+Select_Telegram_Button.place(x=350,y=240,width=100, height=80)
+
+
+# 교통시설의 지도를 그리는 캔버스
+Map_Canvas = Canvas(Frame2, width=265, height=320,bg = "blue")
+Map_Canvas.place(x=500,y= 20)
+
+
+# 정보들을 출력하는 캔버스
+Data_Canvas = Canvas(Frame2, width=480, height=360,bg = "blue")
+Data_Canvas.place(x=10,y= 380)
+
+
+# 산 이미지를 출력하는 캔버스
+Image_Canvas = Canvas(Frame2, width=265, height=360,bg = "yellow")
+Image_Canvas.place(x=500,y= 380)
 
 Window.mainloop()
