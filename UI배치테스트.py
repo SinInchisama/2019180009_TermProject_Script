@@ -49,6 +49,11 @@ Fires_Danger_Canvas = Canvas(Frame1, width=220, height=200,bg = "red")
 Fires_Danger_Canvas.place(x=170,y=120)
 
 
+# 해발고도 그래프를 출력하는 곳
+Altitude_Canvas = Canvas(Frame1, width=590, height=386,bg = "yellow")
+Altitude_Canvas.place(x=170,y=350)
+
+
 # Frame2 세부정보창에 대한 프레임
 
 #Frame2 = Frame(Window)
