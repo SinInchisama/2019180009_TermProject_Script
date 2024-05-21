@@ -45,7 +45,7 @@ Select_Mountain.place(x=10,y=660,width=150, height=80)
 
 
 # 산불위험도를 출력하는 곳
-Fires_Danger_Canvas = Canvas(Frame1, width=220, height=200,bg = "red")
+Fires_Danger_Canvas = Canvas(Frame1, width=220, height=220,bg = "red")
 Fires_Danger_Canvas.place(x=170,y=120)
 
 
@@ -53,6 +53,10 @@ Fires_Danger_Canvas.place(x=170,y=120)
 Altitude_Canvas = Canvas(Frame1, width=590, height=386,bg = "yellow")
 Altitude_Canvas.place(x=170,y=350)
 
+
+# 지도를 출력하는 곳
+Map_Canvas = Canvas(Frame1, width=360, height=320,bg = "blue")
+Map_Canvas.place(x=400,y= 20)
 
 # Frame2 세부정보창에 대한 프레임
 
