@@ -10,7 +10,7 @@ Window.geometry("800x800")
 
 Note = Notebook(Window)
 Note.place(x=10, y=10, width=780, height=780)
-
+'''
 Frame1 = Frame(Note, width=780, height=780)
 Note.add(Frame1,text = " 검색 ")
 
@@ -58,16 +58,17 @@ Altitude_Canvas.place(x=170,y=350)
 Map_Canvas = Canvas(Frame1, width=360, height=320,bg = "blue")
 Map_Canvas.place(x=400,y= 20)
 
+
+'''
+
 # Frame2 세부정보창에 대한 프레임
 
-#Frame2 = Frame(Window)
-#Frame2.pack()
+Frame2 = Frame(Note, width=780, height=780)
+Note.add(Frame2,text = " 정보 ")
 
-#Note = Notebook(Window)
-#Note.place(x=60,y=0)
+# 선택한 산의 교통시설을 보여주는 스크롤바
 
-
-
-#Note2.add(Frame2,text=" 정보 ")
+Scrolled_Transport = ScrolledText(Frame2,width=40,height=25)
+Scrolled_Transport.place(x= 10 ,y=20)
 
 Window.mainloop()
