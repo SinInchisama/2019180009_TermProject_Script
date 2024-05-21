@@ -35,12 +35,19 @@ Txt2.place(x=10,y=70, width=280, height=30)
 Search_Area_Button = Button(Frame1,text = " 검색 ")
 Search_Area_Button.place(x=300,y=72)
 
+
 # 산 목록을 출력하는 곳
 Scrolled_Moutain = ScrolledText(Frame1,width=20,height=40)
 Scrolled_Moutain.place(x= 10 ,y=120)
 
 Select_Mountain= Button(Frame1,text = " 선택 ")
 Select_Mountain.place(x=10,y=660,width=150, height=80)
+
+
+# 산불위험도를 출력하는 곳
+Fires_Danger_Canvas = Canvas(Frame1, width=220, height=200,bg = "red")
+Fires_Danger_Canvas.place(x=170,y=120)
+
 
 # Frame2 세부정보창에 대한 프레임
 
