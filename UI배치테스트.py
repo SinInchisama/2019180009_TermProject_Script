@@ -7,11 +7,18 @@ class MainGUI:
     def Search_Area(self):
         self.SelectM = self.Txt1.get()
         self.Fires_Danger_Canvas.delete("all")
-        self.Fires_Danger_Canvas.create_text(5, 18, text=self.SelectM + " 산불위험예보",font=("Arial", 12),anchor = 'w')
-        '''if(self.SelectM in self.Moutain.Danger_Dict.keys()):
-            self.Fires_Danger_Canvas.create_text(60,10,text= self.SelectM)
-            for item in self.Moutain.Danger_Dict[self.SelectM]:
-                self.Fires_Danger_Canvas.create_text(100,200,text = item)'''
+
+        if(self.SelectM in self.Moutain.Danger_Dict.keys()):
+            self.Fires_Danger_Canvas.create_text(5, 18, text=self.SelectM, font=("Arial", 18), anchor='w')
+            self.Fires_Danger_Canvas.create_text(5, 40, text="산불위험예보", font=("Arial", 18), anchor='w')
+            self.Fires_Danger_Canvas.create_text(5, 80, text="최대 : " + self.Moutain.Danger_Dict[self.SelectM][0]
+                                                 , font=("Arial", 14), anchor='w')
+            self.Fires_Danger_Canvas.create_text(5, 120, text="최소 : " + self.Moutain.Danger_Dict[self.SelectM][2]
+                                                 , font=("Arial", 14), anchor='w')
+            self.Fires_Danger_Canvas.create_text(5, 160, text="평균 : " + self.Moutain.Danger_Dict[self.SelectM][1]
+                                                 , font=("Arial", 14), anchor='w')
+        else:
+            self.Fires_Danger_Canvas.create_text(0, 160, text="검색 결과가 없습니다", font=("Arial", 18), anchor='w')
 
     def Search_Moutain(self):
         self.SelectA = self.Txt2.get()
@@ -20,7 +27,7 @@ class MainGUI:
     def __init__(self):
         self.SelectM = None     # 마운틴 검색을 저장하는 변수
         self.SelectA = None     # 지역 검색을 저장하는 변수
-        #self.Moutain = Mountain()  # xml를 불러와서 저장하는 변수
+        self.Moutain = Mountain()  # xml를 불러와서 저장하는 변수
         self.initWindow()       # tkinter 윈도우를 초기화
 
     def initWindow(self):

@@ -4,13 +4,13 @@ import tkinter
 
 class Mountain:
     def __init__(self):
-        print(1111)
         self.MoutainDict = dict()  # 산정보를 입력받음
         self.Danger_Dict = dict()  # 위험 데이터를 입력받음
 
+        # 100대 명산 파일 정보
         Url = 'http://apis.data.go.kr/B553662/top100FamtListBasiInfoService/getTop100FamtListBasiInfoList'
         Service_Key = '+DVZiTSkzywDM1jkG5NXm3oFTBHWY56Fs1tVGjhCd3GJU7FoZLrvIhGvPeX4JIENdU7G1X5+e98+ah0nvP8OMw=='
-        params ={'serviceKey' : Service_Key,'pageNo' : '1','numOfRows' : '100', 'stdt' : '2024'}            # 100대 명산 파일 정보
+        params ={'serviceKey' : Service_Key,'pageNo' : '1','numOfRows' : '100', 'stdt' : '2024'}
 
         response = requests.get(Url, params=params)
         root = ET.fromstring(response.text)
@@ -41,6 +41,7 @@ class Mountain:
                 value[5].append(List)
 
 
+        # 시도별 산불 위험예보지수
         Url = 'http://apis.data.go.kr/1400377/forestPoint/forestPointListSidoSearch'
         params ={'serviceKey' : Service_Key,'pageNo' : '1','numOfRows' : '100', 'excludeForecast' : '1'}
         response = requests.get(Url, params=params)
