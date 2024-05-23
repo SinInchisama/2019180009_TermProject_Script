@@ -18,12 +18,13 @@ class Mountain:
         for item in root.iter("item"):
             frtrlNm = item.findtext("frtrlNm")
             ctpvNm = item.findtext("ctpvNm")
+            srchCtpvNm = item.findtext("srchCtpvNm")
             addrNm = item.findtext("addrNm")
             lat = item.findtext("lat")
             lot = item.findtext("lot")
             aslAltide = item.findtext("aslAltide")
 
-            self.MoutainDict[frtrlNm] = [ctpvNm,addrNm,lat,lot,aslAltide,[]]
+            self.MoutainDict[frtrlNm] = [ctpvNm,srchCtpvNm,addrNm,lat,lot,aslAltide,[]]
 
         Url = 'http://apis.data.go.kr/B553662/trnspPoiInfoService/getTrnspPoiInfoList'      # 대중교통 xml
 
