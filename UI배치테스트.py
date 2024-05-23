@@ -18,7 +18,7 @@ class MainGUI:
             self.Fires_Danger_Canvas.create_text(5, 160, text="평균 : " + self.Moutain.Danger_Dict[self.SelectM][1]
                                                  , font=("Arial", 14), anchor='w')
         else:
-            self.Fires_Danger_Canvas.create_text(0, 160, text="검색 결과가 없습니다", font=("Arial", 18), anchor='w')
+            self.Fires_Danger_Canvas.create_text(0, 120, text="검색 결과가 없습니다", font=("Arial", 18), anchor='w')
 
     def Search_Moutain(self):
         self.SelectA = self.Txt2.get()
