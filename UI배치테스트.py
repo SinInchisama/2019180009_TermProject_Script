@@ -1,10 +1,17 @@
 from tkinter import *
 from tkinter.ttk import *
 from tkinter.scrolledtext import ScrolledText
+from ReadXML import *
 
 class MainGUI:
     def Search_Area(self):
         self.SelectM = self.Txt1.get()
+        self.Fires_Danger_Canvas.delete("all")
+        self.Fires_Danger_Canvas.create_text(5, 18, text=self.SelectM + " 산불위험예보",font=("Arial", 12),anchor = 'w')
+        '''if(self.SelectM in self.Moutain.Danger_Dict.keys()):
+            self.Fires_Danger_Canvas.create_text(60,10,text= self.SelectM)
+            for item in self.Moutain.Danger_Dict[self.SelectM]:
+                self.Fires_Danger_Canvas.create_text(100,200,text = item)'''
 
     def Search_Moutain(self):
         self.SelectA = self.Txt2.get()
@@ -13,6 +20,7 @@ class MainGUI:
     def __init__(self):
         self.SelectM = None     # 마운틴 검색을 저장하는 변수
         self.SelectA = None     # 지역 검색을 저장하는 변수
+        #self.Moutain = Mountain()  # xml를 불러와서 저장하는 변수
         self.initWindow()       # tkinter 윈도우를 초기화
 
     def initWindow(self):

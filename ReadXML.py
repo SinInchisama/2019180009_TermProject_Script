@@ -4,6 +4,7 @@ import tkinter
 
 class Mountain:
     def __init__(self):
+        print(1111)
         self.MoutainDict = dict()  # 산정보를 입력받음
         self.Danger_Dict = dict()  # 위험 데이터를 입력받음
 
