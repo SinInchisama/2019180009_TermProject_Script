@@ -57,23 +57,24 @@ class MainGUI:
         self.Fires_Danger_Canvas.create_text(0, 120, text="검색 결과가 없습니다", font=("Arial", 18), anchor='w')
 
     def Update_Map(self):
-        SLEF_KEY = 'AIzaSyCo4pAx0xdjYC6zBsVXD9uiZ3BuaSWHDLE'
         gu_map_url = f"https://maps.googleapis.com/maps/api/staticmap?center=" \
-                     f"{self.Moutain.MoutainDict['가리산'][2]},{self.Moutain.MoutainDict['가리산'][3]}&zoom={13}&size=400x400&maptype=roadmap"
+                     f"{self.Moutain.MoutainDict[self.NowMoutain][2]},{self.Moutain.MoutainDict[self.NowMoutain][3]}&zoom={13}&size=400x400&maptype=roadmap"
 
-        print(SLEF_KEY)
-        response = requests.get(gu_map_url + '&key=' + SLEF_KEY)
+        print(self.NowMoutain)
+
+        response = requests.get(gu_map_url + '&key=' + self.Google_API_Key)
         image = Image.open(io.BytesIO(response.content))
         photo = ImageTk.PhotoImage(image)
-        self.Map_Canvas.create_image(0, 0, anchor=NW, image=photo)
+        self.Map_Canvas.itemconfig(self.image_id, image=photo)
+        self.Map_Canvas.image = photo
 
     def __init__(self):
         self.SearchM = None  # 마운틴 검색을 저장하는 변수
         self.SearchA = None  # 지역 검색을 저장하는 변수
         self.NowMoutain = None  # 산을 선택하면 저장되는 변수
         self.Moutain = Mountain()  # xml를 불러와서 저장하는 변수
-        self.initWindow()  # tkinter 윈도우를 초기화
         self.Google_API_Key = 'AIzaSyCo4pAx0xdjYC6zBsVXD9uiZ3BuaSWHDLE'
+        self.initWindow()  # tkinter 윈도우를 초기화
 
     def initWindow(self):
         self.Window = Tk()
@@ -139,6 +140,14 @@ class MainGUI:
         # 지도를 출력하는 곳
         self.Map_Canvas = Canvas(self.Frame1, width=360, height=320,bg = "blue")
         self.Map_Canvas.place(x=400,y= 20)
+
+        gu_map_url = f"https://maps.googleapis.com/maps/api/staticmap?center=" \
+                     f"{self.Moutain.MoutainDict['가리산'][2]},{self.Moutain.MoutainDict['가리산'][3]}&zoom={13}&size=400x400&maptype=roadmap"
+
+        response = requests.get(gu_map_url + '&key=' + self.Google_API_Key)
+        image = Image.open(io.BytesIO(response.content))
+        photo = ImageTk.PhotoImage(image)
+        self.image_id = self.Map_Canvas.create_image(0, 0, anchor=NW, image=photo)
 
         # Frame2 세부정보창에 대한 프레임
 
