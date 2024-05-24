@@ -59,10 +59,10 @@ class MainGUI:
     def Update_Map(self):
         SLEF_KEY = 'AIzaSyCo4pAx0xdjYC6zBsVXD9uiZ3BuaSWHDLE'
         gu_map_url = f"https://maps.googleapis.com/maps/api/staticmap?center=" \
-                     f"{self.Moutain.MoutainDict[self.SearchA][2]},{self.Moutain.MoutainDict[self.SearchA][3]}&zoom={13}&size=400x400&maptype=roadmap"
+                     f"{self.Moutain.MoutainDict['가리산'][2]},{self.Moutain.MoutainDict['가리산'][3]}&zoom={13}&size=400x400&maptype=roadmap"
 
-        print( SLEF_KEY)
-        response = requests.get(gu_map_url + '&key=' +  SLEF_KEY)
+        print(SLEF_KEY)
+        response = requests.get(gu_map_url + '&key=' + SLEF_KEY)
         image = Image.open(io.BytesIO(response.content))
         photo = ImageTk.PhotoImage(image)
         self.Map_Canvas.create_image(0, 0, anchor=NW, image=photo)
@@ -139,9 +139,6 @@ class MainGUI:
         # 지도를 출력하는 곳
         self.Map_Canvas = Canvas(self.Frame1, width=360, height=320,bg = "blue")
         self.Map_Canvas.place(x=400,y= 20)
-
-
-
 
         # Frame2 세부정보창에 대한 프레임
 
