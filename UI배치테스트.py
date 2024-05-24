@@ -57,7 +57,7 @@ class MainGUI:
         self.SearchM = None     # 마운틴 검색을 저장하는 변수
         self.SearchA = None     # 지역 검색을 저장하는 변수
         self.NowMoutain = None  # 산을 선택하면 저장되는 변수
-        self.Moutain = Mountain()  # xml를 불러와서 저장하는 변수
+        #self.Moutain = Mountain()  # xml를 불러와서 저장하는 변수
         self.initWindow()       # tkinter 윈도우를 초기화
 
     def initWindow(self):
