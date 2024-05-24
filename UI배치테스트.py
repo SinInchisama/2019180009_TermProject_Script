@@ -51,28 +51,29 @@ class MainGUI:
     def On_Select_Mountain(self):
         index = self.Listbox_Mountain.curselection()
         self.NowMoutain = self.Listbox_Mountain.get(index[0])
-        print(self.NowMoutain)
+        self.Update_Map()
 
     def Init_All(self):                     # 초기화 하는 함수
         self.Fires_Danger_Canvas.create_text(0, 120, text="검색 결과가 없습니다", font=("Arial", 18), anchor='w')
 
     def Update_Map(self):
+        SLEF_KEY = 'AIzaSyCo4pAx0xdjYC6zBsVXD9uiZ3BuaSWHDLE'
         gu_map_url = f"https://maps.googleapis.com/maps/api/staticmap?center=" \
                      f"{self.Moutain.MoutainDict[self.SearchA][2]},{self.Moutain.MoutainDict[self.SearchA][3]}&zoom={13}&size=400x400&maptype=roadmap"
 
-        response = requests.get(gu_map_url + '&key=' + self.Google_API_Key)
+        print( SLEF_KEY)
+        response = requests.get(gu_map_url + '&key=' +  SLEF_KEY)
         image = Image.open(io.BytesIO(response.content))
         photo = ImageTk.PhotoImage(image)
         self.Map_Canvas.create_image(0, 0, anchor=NW, image=photo)
 
     def __init__(self):
-        self.SearchM = None     # 마운틴 검색을 저장하는 변수
-        self.SearchA = None     # 지역 검색을 저장하는 변수
+        self.SearchM = None  # 마운틴 검색을 저장하는 변수
+        self.SearchA = None  # 지역 검색을 저장하는 변수
         self.NowMoutain = None  # 산을 선택하면 저장되는 변수
         self.Moutain = Mountain()  # xml를 불러와서 저장하는 변수
-        self.initWindow()       # tkinter 윈도우를 초기화
+        self.initWindow()  # tkinter 윈도우를 초기화
         self.Google_API_Key = 'AIzaSyCo4pAx0xdjYC6zBsVXD9uiZ3BuaSWHDLE'
-        self.Gmaps = Client(key=self.Google_API_Key)
 
     def initWindow(self):
         self.Window = Tk()
