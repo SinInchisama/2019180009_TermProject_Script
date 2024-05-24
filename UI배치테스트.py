@@ -65,8 +65,8 @@ class MainGUI:
         response = requests.get(gu_map_url + '&key=' + self.Google_API_Key)
         image = Image.open(io.BytesIO(response.content))
         photo = ImageTk.PhotoImage(image)
-        self.map_label.configure(image=photo)
-        self.map_label.image = photo
+        self.Map_Lavel.configure(image=photo)
+        self.Map_Lavel.image = photo
 
     def __init__(self):
         self.SearchM = None  # 마운틴 검색을 저장하는 변수
