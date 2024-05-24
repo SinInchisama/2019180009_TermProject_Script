@@ -4,31 +4,38 @@ from tkinter.scrolledtext import ScrolledText
 from ReadXML import *
 
 class MainGUI:
-    def Search_Area(self):
-        self.SelectM = self.Txt1.get()
+    def Search_Area(self):                  # 지역 검색처리하는 함수
+        self.SearchM = self.Txt1.get()
 
-        if(self.SelectM == "강원도"):
-            self.SelectM = "강원특별자치도"
+        if(self.SearchM == "강원도"):
+            self.SearchM = "강원특별자치도"
 
         self.Fires_Danger_Canvas.delete("all")
+        self.Listbox_Mountain.delete(0, END)
 
-        if (self.SelectM in self.Moutain.Danger_Dict.keys()):
-            self.Print_Danger(self.SelectM)
+        if (self.SearchM in self.Moutain.Danger_Dict.keys()):
+            self.Print_Danger(self.SearchM)
+
+            for key,item in self.Moutain.MoutainDict.items():
+                if item[0] == self.SearchM:
+                    self.Listbox_Mountain.insert(END, key)
         else:
             self.Init_All()
 
-    def Search_Moutain(self):
-        self.SelectA = self.Txt2.get()
-        self.SelectM = None
+    def Search_Moutain(self):               # 산 검색을 처리하는 함수
+        self.SearchA = self.Txt2.get()
+        self.SearchM = None
 
         self.Fires_Danger_Canvas.delete("all")
-        if(self.SelectA in self.Moutain.MoutainDict.keys()):
-            print(self.Moutain.MoutainDict[self.SelectA][0])
-            self.Print_Danger(self.Moutain.MoutainDict[self.SelectA][0])
+        self.Listbox_Mountain.delete(0, END)
+
+        if(self.SearchA in self.Moutain.MoutainDict.keys()):
+            self.Print_Danger(self.Moutain.MoutainDict[self.SearchA][0])
+            self.Listbox_Mountain.insert(END, self.SearchA)
         else:
             self.Init_All()
 
-    def Print_Danger(self,Search):
+    def Print_Danger(self,Search):          # 산불 위험예보정보를 출력하는 함수
         self.Fires_Danger_Canvas.create_text(5, 18, text= Search, font=("Arial", 18), anchor='w')
         self.Fires_Danger_Canvas.create_text(5, 40, text="산불위험예보", font=("Arial", 18), anchor='w')
         self.Fires_Danger_Canvas.create_text(5, 80, text="최대 : " + self.Moutain.Danger_Dict[Search][0]                                         , font=("Arial", 14), anchor='w')
@@ -37,13 +44,19 @@ class MainGUI:
         self.Fires_Danger_Canvas.create_text(5, 160, text="평균 : " + self.Moutain.Danger_Dict[Search][1]
                                                  , font=("Arial", 14), anchor='w')
 
-    def Init_All(self):
+    def On_Select_Mountain(self):
+        index = self.Listbox_Mountain.curselection()
+        self.NowMoutain = self.Listbox_Mountain.get(index[0])
+        print(self.NowMoutain)
+
+    def Init_All(self):                     # 초기화 하는 함수
         self.Fires_Danger_Canvas.create_text(0, 120, text="검색 결과가 없습니다", font=("Arial", 18), anchor='w')
 
 
     def __init__(self):
-        self.SelectM = None     # 마운틴 검색을 저장하는 변수
-        self.SelectA = None     # 지역 검색을 저장하는 변수
+        self.SearchM = None     # 마운틴 검색을 저장하는 변수
+        self.SearchA = None     # 지역 검색을 저장하는 변수
+        self.NowMoutain = None  # 산을 선택하면 저장되는 변수
         self.Moutain = Mountain()  # xml를 불러와서 저장하는 변수
         self.initWindow()       # tkinter 윈도우를 초기화
 
@@ -83,11 +96,19 @@ class MainGUI:
 
 
         # 산 목록을 출력하는 곳
-        self.Scrolled_Moutain = ScrolledText(self.Frame1,width=20,height=40)
-        self.Scrolled_Moutain.place(x= 10 ,y=120)
+        self.MoutainList_Canvas = Canvas(self.Frame1, width=150, height=520, bg="red")
+        self.MoutainList_Canvas.place(x=10,y=120)
 
-        self.Select_Mountain= Button(self.Frame1,text = " 선택 ")
-        self.Select_Mountain.place(x=10,y=660,width=150, height=80)
+        self.Listbox_Mountain = Listbox(self.MoutainList_Canvas, selectmode=SINGLE, width=20, height=33)
+        self.Listbox_Mountain.pack(side=LEFT)
+
+        self.Scrolledbar_Mountain = Scrollbar(self.MoutainList_Canvas, orient=VERTICAL, command=self.Listbox_Mountain.yview)
+        self.Scrolledbar_Mountain.pack(side=RIGHT, fill=Y)
+
+        self.Listbox_Mountain.config(yscrollcommand=self.Scrolledbar_Mountain.set)
+
+        self.Select_Mountain_Button= Button(self.Frame1, text =" 선택 ",command=self.On_Select_Mountain)
+        self.Select_Mountain_Button.place(x=10, y=660, width=150, height=80)
 
 
         # 산불위험도를 출력하는 곳
