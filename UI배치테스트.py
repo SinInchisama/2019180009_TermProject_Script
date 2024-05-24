@@ -61,12 +61,12 @@ class MainGUI:
                      f"{self.Moutain.MoutainDict[self.NowMoutain][2]},{self.Moutain.MoutainDict[self.NowMoutain][3]}&zoom={13}&size=400x400&maptype=roadmap"
 
         print(self.NowMoutain)
-
+        
         response = requests.get(gu_map_url + '&key=' + self.Google_API_Key)
         image = Image.open(io.BytesIO(response.content))
         photo = ImageTk.PhotoImage(image)
-        self.Map_Canvas.itemconfig(self.image_id, image=photo)
-        self.Map_Canvas.image = photo
+        self.map_label.configure(image=photo)
+        self.map_label.image = photo
 
     def __init__(self):
         self.SearchM = None  # 마운틴 검색을 저장하는 변수
@@ -138,16 +138,16 @@ class MainGUI:
 
 
         # 지도를 출력하는 곳
-        self.Map_Canvas = Canvas(self.Frame1, width=360, height=320,bg = "blue")
-        self.Map_Canvas.place(x=400,y= 20)
-
         gu_map_url = f"https://maps.googleapis.com/maps/api/staticmap?center=" \
                      f"{self.Moutain.MoutainDict['가리산'][2]},{self.Moutain.MoutainDict['가리산'][3]}&zoom={13}&size=400x400&maptype=roadmap"
 
         response = requests.get(gu_map_url + '&key=' + self.Google_API_Key)
         image = Image.open(io.BytesIO(response.content))
         photo = ImageTk.PhotoImage(image)
-        self.image_id = self.Map_Canvas.create_image(0, 0, anchor=NW, image=photo)
+
+        self.Map_Lavel = Label(self.Frame1,image= photo)
+        self.Map_Lavel.place(x=400,y= 20,width=360,height=320)
+
 
         # Frame2 세부정보창에 대한 프레임
 
