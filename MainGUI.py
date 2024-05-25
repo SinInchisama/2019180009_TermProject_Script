@@ -48,16 +48,39 @@ class MainGUI:
         self.Fires_Danger_Canvas.create_text(5, 160, text="평균 : " + self.Moutain.Danger_Dict[Search][1]
                                                  , font=("Arial", 14), anchor='w')
 
-    def On_Select_Mountain(self):
+    def On_Select_Mountain(self):           # 산 리스트에서 산을 선택하는 함수
+        self.Listbox_Transport.delete(0, END)
         index = self.Listbox_Mountain.curselection()
         self.NowMoutain = self.Listbox_Mountain.get(index[0])
         self.Update_TransPort()
         self.Update_Map()
+        self.Update_Image()
+
+    def On_Select_TransPort(self):
+        index = self.Listbox_Transport.curselection()
+        NowTransPort = self.Listbox_Transport.get(index[0])
+
+
+        gu_map_url = f"https://maps.googleapis.com/maps/api/staticmap?center=" \
+                     f"{self.Moutain.MoutainDict[self.NowMoutain]['대중교통'][NowTransPort].lat},{self.Moutain.MoutainDict[self.NowMoutain]['대중교통'][NowTransPort].lot}&zoom={11}&size=400x400&maptype=roadmap"
+
+        marker_url = f"&markers=color:red%7C{self.Moutain.MoutainDict[self.NowMoutain]['대중교통'][NowTransPort].lat},{self.Moutain.MoutainDict[self.NowMoutain]['대중교통'][NowTransPort].lot}"
+
+        gu_map_url += marker_url
+
+        response = requests.get(gu_map_url + '&key=' + self.Google_API_Key)
+        image = Image.open(io.BytesIO(response.content))
+        photo = ImageTk.PhotoImage(image)
+        self.Transport_Map_Lavel.configure(image=photo)
+        self.Transport_Map_Lavel.image = photo
+
 
     def Init_All(self):                     # 초기화 하는 함수
         self.Fires_Danger_Canvas.create_text(0, 120, text="검색 결과가 없습니다", font=("Arial", 18), anchor='w')
 
-    
+    def Update_TransPort(self):
+        for Key,Value in self.Moutain.MoutainDict[self.NowMoutain]['대중교통'].items():
+             self.Listbox_Transport.insert(END, Key)
 
     def Update_Map(self):
         gu_map_url = f"https://maps.googleapis.com/maps/api/staticmap?center=" \
@@ -73,6 +96,9 @@ class MainGUI:
         photo = ImageTk.PhotoImage(image)
         self.Map_Lavel.configure(image=photo)
         self.Map_Lavel.image = photo
+
+    def Update_Image(self):
+        pass
 
     def __init__(self):
         self.SearchM = None  # 마운틴 검색을 저장하는 변수
@@ -144,11 +170,7 @@ class MainGUI:
 
 
         # 지도를 출력하는 곳
-        gu_map_url = f"https://maps.googleapis.com/maps/api/staticmap?center=" \
-                     f"{self.Moutain.MoutainDict['가리산']['위도']},{self.Moutain.MoutainDict['가리산']['경도']}&zoom={13}&size=400x400&maptype=roadmap"
-
-        response = requests.get(gu_map_url + '&key=' + self.Google_API_Key)
-        image = Image.open(io.BytesIO(response.content))
+        image = Image.open('image/Search_Nothing.jpg')
         photo = ImageTk.PhotoImage(image)
 
         self.Map_Lavel = Label(self.Frame1,image= photo)
@@ -175,7 +197,7 @@ class MainGUI:
         self.Listbox_Transport.config(yscrollcommand=self.Scrolledbar_Transport.set)
 
         # 교통 시설 선택 버튼
-        self.Select_Transport_Button = Button(self.Frame2,text = " 선택 ")
+        self.Select_Transport_Button = Button(self.Frame2,text = " 선택 ",command=self.On_Select_TransPort)
         self.Select_Transport_Button.place(x=350,y=40,width=100, height=80)
 
 
@@ -190,9 +212,8 @@ class MainGUI:
 
 
         # 교통시설의 지도를 그리는 캔버스
-        self.Map_Canvas = Canvas(self.Frame2, width=265, height=320,bg = "blue")
-        self.Map_Canvas.place(x=500,y= 20)
-
+        self.Transport_Map_Lavel = Label(self.Frame2,image = photo)
+        self.Transport_Map_Lavel.place(x=500,y= 20, width=265, height=320)
 
         # 정보들을 출력하는 캔버스
         self.Data_Canvas = Canvas(self.Frame2, width=480, height=360,bg = "blue")
@@ -200,8 +221,8 @@ class MainGUI:
 
 
         # 산 이미지를 출력하는 캔버스
-        self.Image_Canvas = Canvas(self.Frame2, width=265, height=360,bg = "yellow")
-        self.Image_Canvas.place(x=500,y= 380)
+        self.Image_Lavel = Label(self.Frame2, image=photo)
+        self.Image_Lavel.place(x=500, y=380, width=265, height=360)
 
         self.Window.mainloop()
 
