@@ -23,7 +23,7 @@ class Mountain:
             lot = item.findtext("lot")
             aslAltide = item.findtext("aslAltide")
 
-            self.MoutainDict[frtrlNm] = [ctpvNm,addrNm,lat,lot,aslAltide,[]]
+            self.MoutainDict[frtrlNm] = {"위치":ctpvNm,"주소":addrNm,"위도":lat,"경도":lot,"고도":aslAltide,"대중교통":[]}
 
         Url = 'http://apis.data.go.kr/B553662/trnspPoiInfoService/getTrnspPoiInfoList'      # 대중교통 xml
 
@@ -33,12 +33,12 @@ class Mountain:
             root = ET.fromstring(response.text)
 
             for item in root.iter("item"):      # lat,lot,placeNum,dscrtCn      경도 위도 이름 특이사항
-                List = list()
-                List.append(item.findtext("lat"))
-                List.append(item.findtext("lot"))
-                List.append(item.findtext("placeNm"))
-                List.append(item.findtext("dscrtCn"))
-                value[5].append(List)
+                Dict = dict()
+                Dict['경도'] = item.findtext("lat")
+                Dict['위도'] = item.findtext("lot")
+                Dict['장소이름'] = item.findtext("placeNm")
+                Dict['설명내용'] = item.findtext("dscrtCn")
+                value["대중교통"].append(Dict)
 
 
         # 시도별 산불 위험예보지수
@@ -54,3 +54,5 @@ class Mountain:
             List.append(item.findtext("mini"))
             self.Danger_Dict[item.findtext("doname")] = List
         self.Danger_Dict["전라북도"] = self.Danger_Dict["전북특별자치도"]
+
+

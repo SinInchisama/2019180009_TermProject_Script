@@ -21,7 +21,7 @@ class MainGUI:
             self.Print_Danger(self.SearchM)
 
             for key,item in self.Moutain.MoutainDict.items():
-                if item[0] == self.SearchM:
+                if item['위치'] == self.SearchM:
                     self.Listbox_Mountain.insert(END, key)
         else:
             self.Init_All()
@@ -34,7 +34,7 @@ class MainGUI:
         self.Listbox_Mountain.delete(0, END)
 
         if(self.SearchA in self.Moutain.MoutainDict.keys()):
-            self.Print_Danger(self.Moutain.MoutainDict[self.SearchA][0])
+            self.Print_Danger(self.Moutain.MoutainDict[self.SearchA]['위치'])
             self.Listbox_Mountain.insert(END, self.SearchA)
         else:
             self.Init_All()
@@ -51,16 +51,22 @@ class MainGUI:
     def On_Select_Mountain(self):
         index = self.Listbox_Mountain.curselection()
         self.NowMoutain = self.Listbox_Mountain.get(index[0])
+        self.Update_TransPort()
         self.Update_Map()
 
     def Init_All(self):                     # 초기화 하는 함수
         self.Fires_Danger_Canvas.create_text(0, 120, text="검색 결과가 없습니다", font=("Arial", 18), anchor='w')
 
+    
+
     def Update_Map(self):
         gu_map_url = f"https://maps.googleapis.com/maps/api/staticmap?center=" \
-                     f"{self.Moutain.MoutainDict[self.NowMoutain][2]},{self.Moutain.MoutainDict[self.NowMoutain][3]}&zoom={13}&size=400x400&maptype=roadmap"
+                     f"{self.Moutain.MoutainDict[self.NowMoutain]['위도']},{self.Moutain.MoutainDict[self.NowMoutain]['경도']}&zoom={11}&size=400x400&maptype=roadmap"
 
-        print(self.NowMoutain)
+
+        marker_url = f"&markers=color:red%7C{self.Moutain.MoutainDict[self.NowMoutain]['위도']},{self.Moutain.MoutainDict[self.NowMoutain]['경도']}"
+
+        gu_map_url+= marker_url
         
         response = requests.get(gu_map_url + '&key=' + self.Google_API_Key)
         image = Image.open(io.BytesIO(response.content))
@@ -139,7 +145,7 @@ class MainGUI:
 
         # 지도를 출력하는 곳
         gu_map_url = f"https://maps.googleapis.com/maps/api/staticmap?center=" \
-                     f"{self.Moutain.MoutainDict['가리산'][2]},{self.Moutain.MoutainDict['가리산'][3]}&zoom={13}&size=400x400&maptype=roadmap"
+                     f"{self.Moutain.MoutainDict['가리산']['위도']},{self.Moutain.MoutainDict['가리산']['경도']}&zoom={13}&size=400x400&maptype=roadmap"
 
         response = requests.get(gu_map_url + '&key=' + self.Google_API_Key)
         image = Image.open(io.BytesIO(response.content))
@@ -148,7 +154,7 @@ class MainGUI:
         self.Map_Lavel = Label(self.Frame1,image= photo)
         self.Map_Lavel.place(x=400,y= 20,width=360,height=320)
 
-
+        #---------------------------------------------------------------------------------------------------------------
         # Frame2 세부정보창에 대한 프레임
 
         self.Frame2 = Frame(self.Note, width=780, height=780)
@@ -156,9 +162,17 @@ class MainGUI:
 
         # 선택한 산의 교통시설을 보여주는 스크롤바
 
-        self.Scrolled_Transport = ScrolledText(self.Frame2,width=40,height=25)
-        self.Scrolled_Transport.place(x= 10 ,y=20)
+        self.Transport_Canvas = Canvas(self.Frame2, width=150, height=320, bg="red")
+        self.Transport_Canvas.place(x=10, y=20)
 
+        self.Listbox_Transport = Listbox(self.Transport_Canvas, selectmode=SINGLE, width=40, height=20)
+        self.Listbox_Transport.pack(side=LEFT)
+
+        self.Scrolledbar_Transport = Scrollbar(self.Transport_Canvas, orient=VERTICAL,
+                                              command=self.Listbox_Transport.yview)
+        self.Scrolledbar_Transport.pack(side=RIGHT, fill=Y)
+
+        self.Listbox_Transport.config(yscrollcommand=self.Scrolledbar_Transport.set)
 
         # 교통 시설 선택 버튼
         self.Select_Transport_Button = Button(self.Frame2,text = " 선택 ")
