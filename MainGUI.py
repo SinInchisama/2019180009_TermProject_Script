@@ -78,12 +78,13 @@ class MainGUI:
         self.SearchM = None
         self.Fires_Danger_Canvas.delete("all")
         self.Listbox_Mountain.delete(0, END)
+        self.Listbox_Transport.delete(0,END)
         self.Transport_Map_Lavel.configure(image=self.photo)
         self.Map_Lavel.configure(image=self.photo)
         self.Image_Lavel.configure(image=self.photo)
         self.Transport_Map_Lavel.image = self.photo
         self.Map_Lavel.image = self.photo
-        self.Image_Map_Lavel.image = self.photo
+        self.Image_Lavel.image = self.photo
 
     def Update_Map(self):
         gu_map_url = f"https://maps.googleapis.com/maps/api/staticmap?center=" \
@@ -127,7 +128,7 @@ class MainGUI:
         self.SearchA = None  # 지역 검색을 저장하는 변수
         self.NowMoutain = None  # 산을 선택하면 저장되는 변수
         self.NowTransPort = None # 대중교통을 선택하면 저장되는 변수
-        #self.Moutain = Mountain()  # xml를 불러와서 저장하는 변수
+        self.Moutain = Mountain()  # xml를 불러와서 저장하는 변수
         self.Google_API_Key = 'AIzaSyCo4pAx0xdjYC6zBsVXD9uiZ3BuaSWHDLE'
         self.initWindow()  # tkinter 윈도우를 초기화
 
