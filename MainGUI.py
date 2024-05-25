@@ -9,13 +9,12 @@ import io
 
 class MainGUI:
     def Search_Area(self):                  # 지역 검색처리하는 함수
+        self.Init_All()
+
         self.SearchM = self.Txt1.get()
 
         if(self.SearchM == "강원도"):
             self.SearchM = "강원특별자치도"
-
-        self.Fires_Danger_Canvas.delete("all")
-        self.Listbox_Mountain.delete(0, END)
 
         if (self.SearchM in self.Moutain.Danger_Dict.keys()):
             self.Print_Danger(self.SearchM)
@@ -24,20 +23,18 @@ class MainGUI:
                 if item['위치'] == self.SearchM:
                     self.Listbox_Mountain.insert(END, key)
         else:
-            self.Init_All()
+            self.Fires_Danger_Canvas.create_text(0, 120, text="검색 결과가 없습니다", font=("Arial", 18), anchor='w')
 
     def Search_Moutain(self):               # 산 검색을 처리하는 함수
-        self.SearchA = self.Txt2.get()
-        self.SearchM = None
+        self.Init_All()
 
-        self.Fires_Danger_Canvas.delete("all")
-        self.Listbox_Mountain.delete(0, END)
+        self.SearchA = self.Txt2.get()
 
         if(self.SearchA in self.Moutain.MoutainDict.keys()):
             self.Print_Danger(self.Moutain.MoutainDict[self.SearchA]['위치'])
             self.Listbox_Mountain.insert(END, self.SearchA)
         else:
-            self.Init_All()
+            self.Fires_Danger_Canvas.create_text(0, 120, text="검색 결과가 없습니다", font=("Arial", 18), anchor='w')
 
     def Print_Danger(self,Search):          # 산불 위험예보정보를 출력하는 함수
         self.Fires_Danger_Canvas.create_text(5, 18, text= Search, font=("Arial", 18), anchor='w')
@@ -77,7 +74,16 @@ class MainGUI:
 
 
     def Init_All(self):                     # 초기화 하는 함수
-        self.Fires_Danger_Canvas.create_text(0, 120, text="검색 결과가 없습니다", font=("Arial", 18), anchor='w')
+        self.SearchA = None
+        self.SearchM = None
+        self.Fires_Danger_Canvas.delete("all")
+        self.Listbox_Mountain.delete(0, END)
+        self.Transport_Map_Lavel.configure(image=self.photo)
+        self.Map_Lavel.configure(image=self.photo)
+        self.Image_Lavel.configure(image=self.photo)
+        self.Transport_Map_Lavel.image = self.photo
+        self.Map_Lavel.image = self.photo
+        self.Image_Map_Lavel.image = self.photo
 
     def Update_Map(self):
         gu_map_url = f"https://maps.googleapis.com/maps/api/staticmap?center=" \
@@ -102,12 +108,13 @@ class MainGUI:
 
     def Update_Information(self):
         self.Data_Canvas.delete('all')
-        self.Data_Canvas.create_text(5, 18, text= '위치는' + self.Moutain.MoutainDict[self.NowMoutain]['위치'], font=("Arial", 14), anchor='w')
-        self.Data_Canvas.create_text(5, 40, text='주소는' + self.Moutain.MoutainDict[self.NowMoutain]['주소'],
+        self.Data_Canvas.create_text(5, 18, text= '산 이름은 ' + self.NowMoutain, font=("Arial", 14), anchor='w')
+        self.Data_Canvas.create_text(5, 40, text= '위치는 ' + self.Moutain.MoutainDict[self.NowMoutain]['위치'], font=("Arial", 14), anchor='w')
+        self.Data_Canvas.create_text(5, 62, text='주소는 ' + self.Moutain.MoutainDict[self.NowMoutain]['주소'],
                                      font=("Arial", 14), anchor='w')
-        self.Data_Canvas.create_text(5, 62, text='위도는' + self.Moutain.MoutainDict[self.NowMoutain]['위도'],
+        self.Data_Canvas.create_text(5, 84, text='위도는 ' + self.Moutain.MoutainDict[self.NowMoutain]['위도'],
                                      font=("Arial", 14), anchor='w')
-        self.Data_Canvas.create_text(5, 84, text='경도는' + self.Moutain.MoutainDict[self.NowMoutain]['경도'],
+        self.Data_Canvas.create_text(5, 106, text='경도는 ' + self.Moutain.MoutainDict[self.NowMoutain]['경도'],
                                      font=("Arial", 14), anchor='w')
 
     def Update_TransPort(self):
@@ -187,9 +194,9 @@ class MainGUI:
 
         # 지도를 출력하는 곳
         image = Image.open('image/Search_Nothing.jpg')
-        photo = ImageTk.PhotoImage(image)
+        self.photo = ImageTk.PhotoImage(image)
 
-        self.Map_Lavel = Label(self.Frame1,image= photo)
+        self.Map_Lavel = Label(self.Frame1,image= self.photo)
         self.Map_Lavel.place(x=400,y= 20,width=360,height=320)
 
         #---------------------------------------------------------------------------------------------------------------
@@ -228,7 +235,7 @@ class MainGUI:
 
 
         # 교통시설의 지도를 그리는 캔버스
-        self.Transport_Map_Lavel = Label(self.Frame2,image = photo)
+        self.Transport_Map_Lavel = Label(self.Frame2,image = self.photo)
         self.Transport_Map_Lavel.place(x=500,y= 20, width=265, height=320)
 
         # 정보들을 출력하는 캔버스
@@ -237,7 +244,7 @@ class MainGUI:
 
 
         # 산 이미지를 출력하는 캔버스
-        self.Image_Lavel = Label(self.Frame2, image=photo)
+        self.Image_Lavel = Label(self.Frame2, image=self.photo)
         self.Image_Lavel.place(x=500, y=380, width=265, height=360)
 
         self.Window.mainloop()
