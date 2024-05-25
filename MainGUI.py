@@ -98,7 +98,10 @@ class MainGUI:
         self.Map_Lavel.image = photo
 
     def Update_Image(self):
-        pass
+        image = Image.open('image/mountain/'+self.NowMoutain)
+        photo = ImageTk.PhotoImage(image)
+        self.Image_Lavel.configure(image=photo)
+        self.Image_Lavel.image = photo
 
     def __init__(self):
         self.SearchM = None  # 마운틴 검색을 저장하는 변수
