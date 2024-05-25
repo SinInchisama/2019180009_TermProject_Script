@@ -98,7 +98,7 @@ class MainGUI:
         self.Map_Lavel.image = photo
 
     def Update_Image(self):
-        image = Image.open('image/mountain/'+self.NowMoutain)
+        image = Image.open('image/mountain/'+self.NowMoutain+".jpg")
         photo = ImageTk.PhotoImage(image)
         self.Image_Lavel.configure(image=photo)
         self.Image_Lavel.image = photo
