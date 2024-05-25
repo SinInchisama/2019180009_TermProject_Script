@@ -42,7 +42,7 @@ class MainGUI:
     def Print_Danger(self,Search):          # 산불 위험예보정보를 출력하는 함수
         self.Fires_Danger_Canvas.create_text(5, 18, text= Search, font=("Arial", 18), anchor='w')
         self.Fires_Danger_Canvas.create_text(5, 40, text="산불위험예보", font=("Arial", 18), anchor='w')
-        self.Fires_Danger_Canvas.create_text(5, 80, text="최대 : " + self.Moutain.Danger_Dict[Search][0]                                         , font=("Arial", 14), anchor='w')
+        self.Fires_Danger_Canvas.create_text(5, 80, text="최대 : " + self.Moutain.Danger_Dict[Search][0], font=("Arial", 14), anchor='w')
         self.Fires_Danger_Canvas.create_text(5, 120, text="최소 : " + self.Moutain.Danger_Dict[Search][2]
                                                  , font=("Arial", 14), anchor='w')
         self.Fires_Danger_Canvas.create_text(5, 160, text="평균 : " + self.Moutain.Danger_Dict[Search][1]
@@ -55,16 +55,17 @@ class MainGUI:
         self.Update_TransPort()
         self.Update_Map()
         self.Update_Image()
+        self.Update_Information()
 
     def On_Select_TransPort(self):
         index = self.Listbox_Transport.curselection()
-        NowTransPort = self.Listbox_Transport.get(index[0])
+        self.NowTransPort = self.Listbox_Transport.get(index[0])
 
 
         gu_map_url = f"https://maps.googleapis.com/maps/api/staticmap?center=" \
-                     f"{self.Moutain.MoutainDict[self.NowMoutain]['대중교통'][NowTransPort].lat},{self.Moutain.MoutainDict[self.NowMoutain]['대중교통'][NowTransPort].lot}&zoom={11}&size=400x400&maptype=roadmap"
+                     f"{self.Moutain.MoutainDict[self.NowMoutain]['대중교통'][self.NowTransPort].lat},{self.Moutain.MoutainDict[self.NowMoutain]['대중교통'][self.NowTransPort].lot}&zoom={11}&size=400x400&maptype=roadmap"
 
-        marker_url = f"&markers=color:red%7C{self.Moutain.MoutainDict[self.NowMoutain]['대중교통'][NowTransPort].lat},{self.Moutain.MoutainDict[self.NowMoutain]['대중교통'][NowTransPort].lot}"
+        marker_url = f"&markers=color:red%7C{self.Moutain.MoutainDict[self.NowMoutain]['대중교통'][self.NowTransPort].lat},{self.Moutain.MoutainDict[self.NowMoutain]['대중교통'][self.NowTransPort].lot}"
 
         gu_map_url += marker_url
 
@@ -77,10 +78,6 @@ class MainGUI:
 
     def Init_All(self):                     # 초기화 하는 함수
         self.Fires_Danger_Canvas.create_text(0, 120, text="검색 결과가 없습니다", font=("Arial", 18), anchor='w')
-
-    def Update_TransPort(self):
-        for Key,Value in self.Moutain.MoutainDict[self.NowMoutain]['대중교통'].items():
-             self.Listbox_Transport.insert(END, Key)
 
     def Update_Map(self):
         gu_map_url = f"https://maps.googleapis.com/maps/api/staticmap?center=" \
@@ -103,11 +100,27 @@ class MainGUI:
         self.Image_Lavel.configure(image=photo)
         self.Image_Lavel.image = photo
 
+    def Update_Information(self):
+        self.Data_Canvas.delete('all')
+        self.Data_Canvas.create_text(5, 18, text= '위치는' + self.Moutain.MoutainDict[self.NowMoutain]['위치'], font=("Arial", 14), anchor='w')
+        self.Data_Canvas.create_text(5, 40, text='주소는' + self.Moutain.MoutainDict[self.NowMoutain]['주소'],
+                                     font=("Arial", 14), anchor='w')
+        self.Data_Canvas.create_text(5, 62, text='위도는' + self.Moutain.MoutainDict[self.NowMoutain]['위도'],
+                                     font=("Arial", 14), anchor='w')
+        self.Data_Canvas.create_text(5, 84, text='경도는' + self.Moutain.MoutainDict[self.NowMoutain]['경도'],
+                                     font=("Arial", 14), anchor='w')
+
+    def Update_TransPort(self):
+        for Key,Value in self.Moutain.MoutainDict[self.NowMoutain]['대중교통'].items():
+             self.Listbox_Transport.insert(END, Key)
+
+
     def __init__(self):
         self.SearchM = None  # 마운틴 검색을 저장하는 변수
         self.SearchA = None  # 지역 검색을 저장하는 변수
         self.NowMoutain = None  # 산을 선택하면 저장되는 변수
-        self.Moutain = Mountain()  # xml를 불러와서 저장하는 변수
+        self.NowTransPort = None # 대중교통을 선택하면 저장되는 변수
+        #self.Moutain = Mountain()  # xml를 불러와서 저장하는 변수
         self.Google_API_Key = 'AIzaSyCo4pAx0xdjYC6zBsVXD9uiZ3BuaSWHDLE'
         self.initWindow()  # tkinter 윈도우를 초기화
 
