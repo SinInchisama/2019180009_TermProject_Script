@@ -5,7 +5,8 @@ from ReadXML import *
 from googlemaps import Client
 from PIL import Image, ImageTk
 import io
-
+import Telegram_Bot
+import asyncio
 
 class MainGUI:
     def Search_Area(self):                  # 지역 검색처리하는 함수
@@ -134,6 +135,9 @@ class MainGUI:
         for Key,Value in self.Moutain.MoutainDict[self.NowMoutain]['대중교통'].items():
              self.Listbox_Transport.insert(END, Key)
 
+    def Send_Telegram(self):
+        pass
+
 
     def __init__(self):
         self.SearchM = None  # 마운틴 검색을 저장하는 변수
@@ -141,6 +145,7 @@ class MainGUI:
         self.NowMoutain = None  # 산을 선택하면 저장되는 변수
         self.NowTransPort = None # 대중교통을 선택하면 저장되는 변수
         self.Moutain = Mountain()  # xml를 불러와서 저장하는 변수
+        self.Telegram = Telegram_Bot.Telegram_Bot()     # 텔레그램 봇 생성
         self.Google_API_Key = 'AIzaSyCo4pAx0xdjYC6zBsVXD9uiZ3BuaSWHDLE'
         self.Graph_height = 389 / 2000
         self.Graph_Width = (590-20) / 21

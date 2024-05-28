@@ -1,0 +1,11 @@
+import telegram
+
+class Telegram_Bot:
+    def __init__(self):
+        Bot_Token = "7345270414:AAGeSMb4hen7L28HZR5dH3yzy6Y34b8raI4"
+        self.Chat_Id = "7281344702"
+        self.Bot = telegram.Bot(token=Bot_Token)
+
+    async def Pass_Message(self,List):
+        for i in List:
+            await self.Bot.send_message(chat_id= self.Chat_Id,text = i)
