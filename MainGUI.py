@@ -19,9 +19,20 @@ class MainGUI:
         if (self.SearchM in self.Moutain.Danger_Dict.keys()):
             self.Print_Danger(self.SearchM)
 
+            i = 0
+
             for key,item in self.Moutain.MoutainDict.items():
                 if item['위치'] == self.SearchM:
                     self.Listbox_Mountain.insert(END, key)
+
+                    self.Altitude_Canvas.create_rectangle(self.Graph_Width * i + 10 ,self.Graph_height * (2000-eval(item['고도'])) +20
+                                                          ,self.Graph_Width * (i+1)+10,389 - 20,tags='shape')
+                    self.Altitude_Canvas.create_text(self.Graph_Width * i + 25,
+                                                          self.Graph_height * (2000 - eval(item['고도'])) + 10,text = item['고도'], tags='shape',font=("Arial", 6))
+                    self.Altitude_Canvas.create_text(self.Graph_Width * i + 25,
+                                                     389-10,
+                                                     text=key, tags='shape',font=("Arial", 6))
+                    i += 1
         else:
             self.Fires_Danger_Canvas.create_text(0, 120, text="검색 결과가 없습니다", font=("Arial", 18), anchor='w')
 
@@ -85,6 +96,7 @@ class MainGUI:
         self.Transport_Map_Lavel.image = self.photo
         self.Map_Lavel.image = self.photo
         self.Image_Lavel.image = self.photo
+        self.Altitude_Canvas.delete('shape')
 
     def Update_Map(self):
         gu_map_url = f"https://maps.googleapis.com/maps/api/staticmap?center=" \
@@ -130,6 +142,8 @@ class MainGUI:
         self.NowTransPort = None # 대중교통을 선택하면 저장되는 변수
         self.Moutain = Mountain()  # xml를 불러와서 저장하는 변수
         self.Google_API_Key = 'AIzaSyCo4pAx0xdjYC6zBsVXD9uiZ3BuaSWHDLE'
+        self.Graph_height = 389 / 2000
+        self.Graph_Width = (590-20) / 21
         self.initWindow()  # tkinter 윈도우를 초기화
 
     def initWindow(self):
@@ -191,7 +205,6 @@ class MainGUI:
         # 해발고도 그래프를 출력하는 곳
         self.Altitude_Canvas = Canvas(self.Frame1, width=590, height=386,bg = "yellow")
         self.Altitude_Canvas.place(x=170,y=350)
-
 
         # 지도를 출력하는 곳
         image = Image.open('image/Search_Nothing.jpg')
