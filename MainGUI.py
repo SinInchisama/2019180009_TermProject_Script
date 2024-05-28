@@ -136,7 +136,7 @@ class MainGUI:
              self.Listbox_Transport.insert(END, Key)
 
     def Send_Telegram(self):
-        pass
+        asyncio.run(self.Telegram.Pass_Message(self.Moutain.MoutainDict[self.NowMoutain]))
 
 
     def __init__(self):
@@ -244,7 +244,7 @@ class MainGUI:
 
 
         # 텔레그램 선택 버튼
-        self.Select_Telegram_Button = Button(self.Frame2,text = " 텔레그램 ")
+        self.Select_Telegram_Button = Button(self.Frame2,text = " 텔레그램 ",command=self.Send_Telegram)
         self.Select_Telegram_Button.place(x=350,y=140,width=100, height=80)
 
 
