@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0ddc709a-93c3-48a1-8a0d-fbad0d3c0d78" name="Changes" comment="" />
+    <list default="true" id="0ddc709a-93c3-48a1-8a0d-fbad0d3c0d78" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MainGUI.py" beforeDir="false" afterPath="$PROJECT_DIR$/MainGUI.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ReadXML.py" beforeDir="false" afterPath="$PROJECT_DIR$/ReadXML.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -33,6 +38,7 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;Python.G_email.executor&quot;: &quot;Run&quot;,
     &quot;Python.MainGUI.executor&quot;: &quot;Run&quot;,
     &quot;Python.ReadXML.executor&quot;: &quot;Run&quot;,
     &quot;Python.UI배치테스트.executor&quot;: &quot;Run&quot;,
