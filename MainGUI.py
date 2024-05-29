@@ -7,6 +7,7 @@ from PIL import Image, ImageTk
 import io
 import Telegram_Bot
 import asyncio
+import G_email
 
 class MainGUI:
     def Search_Area(self):                  # 지역 검색처리하는 함수
@@ -23,6 +24,8 @@ class MainGUI:
             i = 0
 
             for key,item in self.Moutain.MoutainDict.items():
+                if(key == '강천산'):
+                    print(item['위치'],self.SearchM)
                 if item['위치'] == self.SearchM:
                     self.Listbox_Mountain.insert(END, key)
 
@@ -45,6 +48,16 @@ class MainGUI:
         if(self.SearchA in self.Moutain.MoutainDict.keys()):
             self.Print_Danger(self.Moutain.MoutainDict[self.SearchA]['위치'])
             self.Listbox_Mountain.insert(END, self.SearchA)
+
+            self.Altitude_Canvas.create_rectangle(10,
+                                                  self.Graph_height * (2000 - eval(self.Moutain.MoutainDict[self.SearchA]['고도'])) + 20
+                                                  , self.Graph_Width + 10, 389 - 20, tags='shape')
+            self.Altitude_Canvas.create_text(+ 25,
+                                             self.Graph_height * (2000 - eval(self.Moutain.MoutainDict[self.SearchA]['고도'])) + 10, text=self.Moutain.MoutainDict[self.SearchA]['고도'],
+                                             tags='shape', font=("Arial", 6))
+            self.Altitude_Canvas.create_text(+ 25,
+                                             389 - 10,
+                                             text=self.SearchA, tags='shape', font=("Arial", 6))
         else:
             self.Fires_Danger_Canvas.create_text(0, 120, text="검색 결과가 없습니다", font=("Arial", 18), anchor='w')
 
@@ -125,18 +138,26 @@ class MainGUI:
         self.Data_Canvas.create_text(5, 18, text= '산 이름은 ' + self.NowMoutain, font=("Arial", 14), anchor='w')
         self.Data_Canvas.create_text(5, 40, text= '위치는 ' + self.Moutain.MoutainDict[self.NowMoutain]['위치'], font=("Arial", 14), anchor='w')
         self.Data_Canvas.create_text(5, 62, text='주소는 ' + self.Moutain.MoutainDict[self.NowMoutain]['주소'],
-                                     font=("Arial", 14), anchor='w')
+                                     font=("Arial", 10), anchor='w')
         self.Data_Canvas.create_text(5, 84, text='위도는 ' + self.Moutain.MoutainDict[self.NowMoutain]['위도'],
                                      font=("Arial", 14), anchor='w')
         self.Data_Canvas.create_text(5, 106, text='경도는 ' + self.Moutain.MoutainDict[self.NowMoutain]['경도'],
                                      font=("Arial", 14), anchor='w')
 
     def Update_TransPort(self):
-        for Key,Value in self.Moutain.MoutainDict[self.NowMoutain]['대중교통'].items():
-             self.Listbox_Transport.insert(END, Key)
+        if(self.Moutain.MoutainDict[self.NowMoutain]['대중교통']):
+            for Key,Value in self.Moutain.MoutainDict[self.NowMoutain]['대중교통'].items():
+                 self.Listbox_Transport.insert(END, Key)
+        else:
+            self.Listbox_Transport.insert(END, "입력된 대중교통 정보가 없습니다.")
+
+    def Send_Email(self):
+        if(self.NowMoutain):
+            G_email.Pass_Email(self.NowMoutain,self.Moutain.MoutainDict[self.NowMoutain])
 
     def Send_Telegram(self):
-        asyncio.run(self.Telegram.Pass_Message(self.Moutain.MoutainDict[self.NowMoutain]))
+        if (self.NowMoutain):
+            asyncio.run(self.Telegram.Pass_Message(self.Moutain.MoutainDict[self.NowMoutain]))
 
 
     def __init__(self):
@@ -203,12 +224,12 @@ class MainGUI:
 
 
         # 산불위험도를 출력하는 곳
-        self.Fires_Danger_Canvas = Canvas(self.Frame1, width=220, height=220,bg = "red")
+        self.Fires_Danger_Canvas = Canvas(self.Frame1, width=220, height=220,bg = "light gray")
         self.Fires_Danger_Canvas.place(x=170,y=120)
 
 
         # 해발고도 그래프를 출력하는 곳
-        self.Altitude_Canvas = Canvas(self.Frame1, width=590, height=386,bg = "yellow")
+        self.Altitude_Canvas = Canvas(self.Frame1, width=590, height=386,bg = "light gray")
         self.Altitude_Canvas.place(x=170,y=350)
 
         # 지도를 출력하는 곳
@@ -226,7 +247,7 @@ class MainGUI:
 
         # 선택한 산의 교통시설을 보여주는 스크롤바
 
-        self.Transport_Canvas = Canvas(self.Frame2, width=150, height=320, bg="red")
+        self.Transport_Canvas = Canvas(self.Frame2, width=150, height=320, bg="light gray")
         self.Transport_Canvas.place(x=10, y=20)
 
         self.Listbox_Transport = Listbox(self.Transport_Canvas, selectmode=SINGLE, width=40, height=20)
@@ -239,17 +260,24 @@ class MainGUI:
         self.Listbox_Transport.config(yscrollcommand=self.Scrolledbar_Transport.set)
 
         # 교통 시설 선택 버튼
+
         self.Select_Transport_Button = Button(self.Frame2,text = " 선택 ",command=self.On_Select_TransPort)
         self.Select_Transport_Button.place(x=350,y=40,width=100, height=80)
 
 
         # 텔레그램 선택 버튼
-        self.Select_Telegram_Button = Button(self.Frame2,text = " 텔레그램 ",command=self.Send_Telegram)
+        image1 = Image.open('image/Telegram.jpg')
+        photo = ImageTk.PhotoImage(image1)
+
+        self.Select_Telegram_Button = Button(self.Frame2,text = " 텔레그램 ",image=photo,command=self.Send_Telegram)
         self.Select_Telegram_Button.place(x=350,y=140,width=100, height=80)
 
 
         # 메일 선택 버튼
-        self.Select_Telegram_Button = Button(self.Frame2,text = " 메일 ")
+        image = Image.open('image/gmail.JPG')
+        photo1 = ImageTk.PhotoImage(image)
+
+        self.Select_Telegram_Button = Button(self.Frame2,text = " 메일 ",image= photo1,command= self.Send_Email)
         self.Select_Telegram_Button.place(x=350,y=240,width=100, height=80)
 
 
@@ -258,7 +286,7 @@ class MainGUI:
         self.Transport_Map_Lavel.place(x=500,y= 20, width=265, height=320)
 
         # 정보들을 출력하는 캔버스
-        self.Data_Canvas = Canvas(self.Frame2, width=480, height=360,bg = "blue")
+        self.Data_Canvas = Canvas(self.Frame2, width=480, height=360,bg = "light gray")
         self.Data_Canvas.place(x=10,y= 380)
 
 

@@ -25,6 +25,7 @@ class Mountain:
 
             self.MoutainDict[frtrlNm] = {"위치":ctpvNm,"주소":addrNm,"위도":lat,"경도":lot,"고도":aslAltide,"대중교통":dict()}
 
+
         Url = 'http://apis.data.go.kr/B553662/trnspPoiInfoService/getTrnspPoiInfoList'      # 대중교통 xml
 
         for key,value in self.MoutainDict.items():
@@ -48,8 +49,8 @@ class Mountain:
             List.append(item.findtext("meanavg"))
             List.append(item.findtext("mini"))
             self.Danger_Dict[item.findtext("doname")] = List
-        self.Danger_Dict["전라북도"] = self.Danger_Dict["전북특별자치도"]
 
+        self.Danger_Dict["전라북도"] = self.Danger_Dict["전북특별자치도"]
 
 class TransPort:
 
