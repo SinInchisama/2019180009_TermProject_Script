@@ -6,6 +6,6 @@ class Telegram_Bot:
         self.Chat_Id = "7281344702"
         self.Bot = telegram.Bot(token=Bot_Token)
 
-    async def Pass_Message(self,Dict):
+    def Pass_Message(self,Dict):
         for key,value in Dict.items():
-            await self.Bot.send_message(chat_id= self.Chat_Id,text = value)
+            self.Bot.send_message(chat_id= self.Chat_Id,text = value)

@@ -157,7 +157,7 @@ class MainGUI:
 
     def Send_Telegram(self):
         if (self.NowMoutain):
-            asyncio.run(self.Telegram.Pass_Message(self.Moutain.MoutainDict[self.NowMoutain]))
+            self.Telegram.Pass_Message(self.Moutain.MoutainDict[self.NowMoutain])
 
 
     def __init__(self):
