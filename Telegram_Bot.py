@@ -1,4 +1,5 @@
 import telegram
+import asyncio
 
 class Telegram_Bot:
     def __init__(self):
@@ -9,3 +10,14 @@ class Telegram_Bot:
     def Pass_Message(self,Dict):
         for key,value in Dict.items():
             self.Bot.send_message(chat_id= self.Chat_Id,text = value)
+
+    def Pass_Message1(self):
+        self.Bot.send_message(chat_id= self.Chat_Id,text = 'hihihi')
+
+    async def Pass_Message2(self):
+        await self.Bot.send_message(chat_id=self.Chat_Id, text='hihihi')
+
+
+T = Telegram_Bot()
+#T.Pass_Message1()
+asyncio.run(T.Pass_Message2())
