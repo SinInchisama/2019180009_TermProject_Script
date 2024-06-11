@@ -1,5 +1,6 @@
 import telepot
 import noti
+import spam
 
 def handle(msg):
     content_type, chat_type, chat_id = telepot.glance(msg)
