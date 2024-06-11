@@ -1,12 +1,12 @@
 from tkinter import *
 from tkinter.ttk import *
 from tkinter.scrolledtext import ScrolledText
-from ReadXML import *
+import ReadXML
 from googlemaps import Client
 from PIL import Image, ImageTk
 import io
 import Telegram_Bot
-import asyncio
+import requests
 import G_email
 
 class MainGUI:
@@ -18,12 +18,12 @@ class MainGUI:
         if(self.SearchM == "강원도"):
             self.SearchM = "강원특별자치도"
 
-        if (self.SearchM in self.Moutain.Danger_Dict.keys()):
+        if (self.SearchM in ReadXML.Mountain_Data.Danger_Dict.keys()):
             self.Print_Danger(self.SearchM)
 
             i = 0
 
-            for key,item in self.Moutain.MoutainDict.items():
+            for key,item in ReadXML.Mountain_Data.MoutainDict.items():
                 if(key == '강천산'):
                     print(item['위치'],self.SearchM)
                 if item['위치'] == self.SearchM:
@@ -45,15 +45,15 @@ class MainGUI:
 
         self.SearchA = self.Txt2.get()
 
-        if(self.SearchA in self.Moutain.MoutainDict.keys()):
-            self.Print_Danger(self.Moutain.MoutainDict[self.SearchA]['위치'])
+        if(self.SearchA in ReadXML.Mountain_Data.MoutainDict.keys()):
+            self.Print_Danger(ReadXML.Mountain_Data.MoutainDict[self.SearchA]['위치'])
             self.Listbox_Mountain.insert(END, self.SearchA)
 
             self.Altitude_Canvas.create_rectangle(10,
-                                                  self.Graph_height * (2000 - eval(self.Moutain.MoutainDict[self.SearchA]['고도'])) + 20
+                                                  self.Graph_height * (2000 - eval(ReadXML.Mountain_Data.MoutainDict[self.SearchA]['고도'])) + 20
                                                   , self.Graph_Width + 10, 389 - 20, tags='shape')
             self.Altitude_Canvas.create_text(+ 25,
-                                             self.Graph_height * (2000 - eval(self.Moutain.MoutainDict[self.SearchA]['고도'])) + 10, text=self.Moutain.MoutainDict[self.SearchA]['고도'],
+                                             self.Graph_height * (2000 - eval(ReadXML.Mountain_Data.MoutainDict[self.SearchA]['고도'])) + 10, text=self.Moutain.MoutainDict[self.SearchA]['고도'],
                                              tags='shape', font=("Arial", 6))
             self.Altitude_Canvas.create_text(+ 25,
                                              389 - 10,
@@ -64,10 +64,10 @@ class MainGUI:
     def Print_Danger(self,Search):          # 산불 위험예보정보를 출력하는 함수
         self.Fires_Danger_Canvas.create_text(5, 18, text= Search, font=("Arial", 18), anchor='w')
         self.Fires_Danger_Canvas.create_text(5, 40, text="산불위험예보", font=("Arial", 18), anchor='w')
-        self.Fires_Danger_Canvas.create_text(5, 80, text="최대 : " + self.Moutain.Danger_Dict[Search][0], font=("Arial", 14), anchor='w')
-        self.Fires_Danger_Canvas.create_text(5, 120, text="최소 : " + self.Moutain.Danger_Dict[Search][2]
+        self.Fires_Danger_Canvas.create_text(5, 80, text="최대 : " + ReadXML.Mountain_Data.Danger_Dict[Search][0], font=("Arial", 14), anchor='w')
+        self.Fires_Danger_Canvas.create_text(5, 120, text="최소 : " + ReadXML.Mountain_Data.Danger_Dict[Search][2]
                                                  , font=("Arial", 14), anchor='w')
-        self.Fires_Danger_Canvas.create_text(5, 160, text="평균 : " + self.Moutain.Danger_Dict[Search][1]
+        self.Fires_Danger_Canvas.create_text(5, 160, text="평균 : " + ReadXML.Mountain_Data.Danger_Dict[Search][1]
                                                  , font=("Arial", 14), anchor='w')
 
     def On_Select_Mountain(self):           # 산 리스트에서 산을 선택하는 함수
@@ -165,7 +165,6 @@ class MainGUI:
         self.SearchA = None  # 지역 검색을 저장하는 변수
         self.NowMoutain = None  # 산을 선택하면 저장되는 변수
         self.NowTransPort = None # 대중교통을 선택하면 저장되는 변수
-        self.Moutain = Mountain()  # xml를 불러와서 저장하는 변수
         self.Telegram = Telegram_Bot.Telegram_Bot()     # 텔레그램 봇 생성
         self.Google_API_Key = 'AIzaSyCo4pAx0xdjYC6zBsVXD9uiZ3BuaSWHDLE'
         self.Graph_height = 389 / 2000

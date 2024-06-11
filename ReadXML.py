@@ -24,6 +24,7 @@ class Mountain:
             aslAltide = item.findtext("aslAltide")
 
             self.MoutainDict[frtrlNm] = {"위치":ctpvNm,"주소":addrNm,"위도":lat,"경도":lot,"고도":aslAltide,"대중교통":dict()}
+            CtpvNm.add(ctpvNm)
 
 
         Url = 'http://apis.data.go.kr/B553662/trnspPoiInfoService/getTrnspPoiInfoList'      # 대중교통 xml
@@ -58,3 +59,7 @@ class TransPort:
         self.lat = lat          # 경도
         self.lot = lot          # 위도
         self.dscrtCn = dscrtCn  # 장소 설명
+
+
+CtpvNm = set()
+Mountain_Data = Mountain()
