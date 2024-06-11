@@ -8,6 +8,8 @@ import io
 import Telegram_Bot
 import requests
 import G_email
+import spam
+import multiprocessing
 
 class MainGUI:
     def Search_Area(self):                  # 지역 검색처리하는 함수
@@ -29,7 +31,7 @@ class MainGUI:
                 if item['위치'] == self.SearchM:
                     self.Listbox_Mountain.insert(END, key)
 
-                    self.Altitude_Canvas.create_rectangle(self.Graph_Width * i + 10 ,self.Graph_height * (2000-eval(item['고도'])) +20
+                    self.Altitude_Canvas.create_rectangle(spam.add(self.Graph_Width * i , 10) ,spam.add(self.Graph_height * (2000-eval(item['고도'])) ,20)
                                                           ,self.Graph_Width * (i+1)+10,389 - 20,tags='shape')
                     self.Altitude_Canvas.create_text(self.Graph_Width * i + 25,
                                                           self.Graph_height * (2000 - eval(item['고도'])) + 10,text = item['고도'], tags='shape',font=("Arial", 6))
@@ -85,9 +87,9 @@ class MainGUI:
 
 
         gu_map_url = f"https://maps.googleapis.com/maps/api/staticmap?center=" \
-                     f"{self.Moutain.MoutainDict[self.NowMoutain]['대중교통'][self.NowTransPort].lat},{self.Moutain.MoutainDict[self.NowMoutain]['대중교통'][self.NowTransPort].lot}&zoom={11}&size=400x400&maptype=roadmap"
+                     f"{ReadXML.Mountain_Data.MoutainDict[self.NowMoutain]['대중교통'][self.NowTransPort].lat},{ReadXML.Mountain_Data.MoutainDict[self.NowMoutain]['대중교통'][self.NowTransPort].lot}&zoom={11}&size=400x400&maptype=roadmap"
 
-        marker_url = f"&markers=color:red%7C{self.Moutain.MoutainDict[self.NowMoutain]['대중교통'][self.NowTransPort].lat},{self.Moutain.MoutainDict[self.NowMoutain]['대중교통'][self.NowTransPort].lot}"
+        marker_url = f"&markers=color:red%7C{ReadXML.Mountain_Data.MoutainDict[self.NowMoutain]['대중교통'][self.NowTransPort].lat},{ReadXML.Mountain_Data.MoutainDict[self.NowMoutain]['대중교통'][self.NowTransPort].lot}"
 
         gu_map_url += marker_url
 
@@ -114,10 +116,10 @@ class MainGUI:
 
     def Update_Map(self):
         gu_map_url = f"https://maps.googleapis.com/maps/api/staticmap?center=" \
-                     f"{self.Moutain.MoutainDict[self.NowMoutain]['위도']},{self.Moutain.MoutainDict[self.NowMoutain]['경도']}&zoom={11}&size=400x400&maptype=roadmap"
+                     f"{ReadXML.Mountain_Data.MoutainDict[self.NowMoutain]['위도']},{ReadXML.Mountain_Data.MoutainDict[self.NowMoutain]['경도']}&zoom={11}&size=400x400&maptype=roadmap"
 
 
-        marker_url = f"&markers=color:red%7C{self.Moutain.MoutainDict[self.NowMoutain]['위도']},{self.Moutain.MoutainDict[self.NowMoutain]['경도']}"
+        marker_url = f"&markers=color:red%7C{ReadXML.Mountain_Data.MoutainDict[self.NowMoutain]['위도']},{ReadXML.Mountain_Data.MoutainDict[self.NowMoutain]['경도']}"
 
         gu_map_url+= marker_url
         
@@ -136,28 +138,28 @@ class MainGUI:
     def Update_Information(self):
         self.Data_Canvas.delete('all')
         self.Data_Canvas.create_text(5, 18, text= '산 이름은 ' + self.NowMoutain, font=("Arial", 14), anchor='w')
-        self.Data_Canvas.create_text(5, 40, text= '위치는 ' + self.Moutain.MoutainDict[self.NowMoutain]['위치'], font=("Arial", 14), anchor='w')
-        self.Data_Canvas.create_text(5, 62, text='주소는 ' + self.Moutain.MoutainDict[self.NowMoutain]['주소'],
+        self.Data_Canvas.create_text(5, 40, text= '위치는 ' + ReadXML.Mountain_Data.MoutainDict[self.NowMoutain]['위치'], font=("Arial", 14), anchor='w')
+        self.Data_Canvas.create_text(5, 62, text='주소는 ' + ReadXML.Mountain_Data.MoutainDict[self.NowMoutain]['주소'],
                                      font=("Arial", 10), anchor='w')
-        self.Data_Canvas.create_text(5, 84, text='위도는 ' + self.Moutain.MoutainDict[self.NowMoutain]['위도'],
+        self.Data_Canvas.create_text(5, 84, text='위도는 ' + ReadXML.Mountain_Data.MoutainDict[self.NowMoutain]['위도'],
                                      font=("Arial", 14), anchor='w')
-        self.Data_Canvas.create_text(5, 106, text='경도는 ' + self.Moutain.MoutainDict[self.NowMoutain]['경도'],
+        self.Data_Canvas.create_text(5, 106, text='경도는 ' + ReadXML.Mountain_Data.MoutainDict[self.NowMoutain]['경도'],
                                      font=("Arial", 14), anchor='w')
 
     def Update_TransPort(self):
-        if(self.Moutain.MoutainDict[self.NowMoutain]['대중교통']):
-            for Key,Value in self.Moutain.MoutainDict[self.NowMoutain]['대중교통'].items():
+        if(ReadXML.Mountain_Data.MoutainDict[self.NowMoutain]['대중교통']):
+            for Key,Value in ReadXML.Mountain_Data.MoutainDict[self.NowMoutain]['대중교통'].items():
                  self.Listbox_Transport.insert(END, Key)
         else:
             self.Listbox_Transport.insert(END, "입력된 대중교통 정보가 없습니다.")
 
     def Send_Email(self):
         if(self.NowMoutain):
-            G_email.Pass_Email(self.NowMoutain,self.Moutain.MoutainDict[self.NowMoutain])
+            G_email.Pass_Email(self.NowMoutain,ReadXML.Mountain_Data.MoutainDict[self.NowMoutain])
 
     def Send_Telegram(self):
         if (self.NowMoutain):
-            self.Telegram.Pass_Message(self.Moutain.MoutainDict[self.NowMoutain])
+            self.Telegram.Pass_Message(ReadXML.Mountain_Data.MoutainDict[self.NowMoutain])
 
 
     def __init__(self):
@@ -170,6 +172,8 @@ class MainGUI:
         self.Graph_height = 389 / 2000
         self.Graph_Width = (590-20) / 21
         self.initWindow()  # tkinter 윈도우를 초기화
+
+        
 
     def initWindow(self):
         self.Window = Tk()
@@ -293,6 +297,5 @@ class MainGUI:
         self.Image_Lavel = Label(self.Frame2, image=self.photo)
         self.Image_Lavel.place(x=500, y=380, width=265, height=360)
 
-        self.Window.mainloop()
 
 MainGUI()
