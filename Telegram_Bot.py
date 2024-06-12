@@ -7,7 +7,10 @@ from telepot.loop import MessageLoop
 class Telegram_Bot:
     def Pass_Message(self,Dict):
         for key,value in Dict.items():
-            self.Bot.sendMessage(chat_id= self.Chat_Id,text =key + "는 " + value)
+            if (key == '대중교통'):
+                pass
+            else:
+                self.Bot.sendMessage(chat_id= self.Chat_Id,text =key + "는 " + value)
         self.Bot.sendMessage(chat_id=self.Chat_Id, text='----------------------------------------------------------------------------------------------------')
 
     def replyAptData(self,user, loc_param):

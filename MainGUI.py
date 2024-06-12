@@ -22,21 +22,18 @@ class MainGUI:
 
         if (self.SearchM in ReadXML.Mountain_Data.Danger_Dict.keys()):
             self.Print_Danger(self.SearchM)
-
             i = 0
 
             for key,item in ReadXML.Mountain_Data.MoutainDict.items():
-                if(key == '강천산'):
-                    print(item['위치'],self.SearchM)
                 if item['위치'] == self.SearchM:
                     self.Listbox_Mountain.insert(END, key)
 
                     self.Altitude_Canvas.create_rectangle(spam.add(self.Graph_Width * i , 10) ,spam.add(self.Graph_height * (2000-eval(item['고도'])) ,20)
-                                                          ,self.Graph_Width * (i+1)+10,389 - 20,tags='shape')
+                                                          ,self.Graph_Width * (i+1)+10,342 - 20,tags='shape')
                     self.Altitude_Canvas.create_text(self.Graph_Width * i + 25,
                                                           self.Graph_height * (2000 - eval(item['고도'])) + 10,text = item['고도'], tags='shape',font=("Arial", 6))
                     self.Altitude_Canvas.create_text(self.Graph_Width * i + 25,
-                                                     389-10,
+                                                     342-10,
                                                      text=key, tags='shape',font=("Arial", 6))
                     i += 1
         else:
@@ -53,12 +50,12 @@ class MainGUI:
 
             self.Altitude_Canvas.create_rectangle(10,
                                                   self.Graph_height * (2000 - eval(ReadXML.Mountain_Data.MoutainDict[self.SearchA]['고도'])) + 20
-                                                  , self.Graph_Width + 10, 389 - 20, tags='shape')
+                                                  , self.Graph_Width + 10, 342 - 20, tags='shape')
             self.Altitude_Canvas.create_text(+ 25,
-                                             self.Graph_height * (2000 - eval(ReadXML.Mountain_Data.MoutainDict[self.SearchA]['고도'])) + 10, text=self.Moutain.MoutainDict[self.SearchA]['고도'],
+                                             self.Graph_height * (2000 - eval(ReadXML.Mountain_Data.MoutainDict[self.SearchA]['고도'])) + 10, text=ReadXML.Mountain_Data.MoutainDict[self.SearchA]['고도'],
                                              tags='shape', font=("Arial", 6))
             self.Altitude_Canvas.create_text(+ 25,
-                                             389 - 10,
+                                             342 - 10,
                                              text=self.SearchA, tags='shape', font=("Arial", 6))
         else:
             self.Fires_Danger_Canvas.create_text(0, 120, text="검색 결과가 없습니다", font=("Arial", 18), anchor='w')
@@ -87,7 +84,7 @@ class MainGUI:
 
 
         gu_map_url = f"https://maps.googleapis.com/maps/api/staticmap?center=" \
-                     f"{ReadXML.Mountain_Data.MoutainDict[self.NowMoutain]['대중교통'][self.NowTransPort].lat},{ReadXML.Mountain_Data.MoutainDict[self.NowMoutain]['대중교통'][self.NowTransPort].lot}&zoom={11}&size=400x400&maptype=roadmap"
+                     f"{ReadXML.Mountain_Data.MoutainDict[self.NowMoutain]['대중교통'][self.NowTransPort].lat},{ReadXML.Mountain_Data.MoutainDict[self.NowMoutain]['대중교통'][self.NowTransPort].lot}&zoom={self.Transzoom}&size=400x400&maptype=roadmap"
 
         marker_url = f"&markers=color:red%7C{ReadXML.Mountain_Data.MoutainDict[self.NowMoutain]['대중교통'][self.NowTransPort].lat},{ReadXML.Mountain_Data.MoutainDict[self.NowMoutain]['대중교통'][self.NowTransPort].lot}"
 
@@ -99,24 +96,9 @@ class MainGUI:
         self.Transport_Map_Lavel.configure(image=photo)
         self.Transport_Map_Lavel.image = photo
 
-
-    def Init_All(self):                     # 초기화 하는 함수
-        self.SearchA = None
-        self.SearchM = None
-        self.Fires_Danger_Canvas.delete("all")
-        self.Listbox_Mountain.delete(0, END)
-        self.Listbox_Transport.delete(0,END)
-        self.Transport_Map_Lavel.configure(image=self.photo)
-        self.Map_Lavel.configure(image=self.photo)
-        self.Image_Lavel.configure(image=self.photo)
-        self.Transport_Map_Lavel.image = self.photo
-        self.Map_Lavel.image = self.photo
-        self.Image_Lavel.image = self.photo
-        self.Altitude_Canvas.delete('shape')
-
     def Update_Map(self):
         gu_map_url = f"https://maps.googleapis.com/maps/api/staticmap?center=" \
-                     f"{ReadXML.Mountain_Data.MoutainDict[self.NowMoutain]['위도']},{ReadXML.Mountain_Data.MoutainDict[self.NowMoutain]['경도']}&zoom={11}&size=400x400&maptype=roadmap"
+                     f"{ReadXML.Mountain_Data.MoutainDict[self.NowMoutain]['위도']},{ReadXML.Mountain_Data.MoutainDict[self.NowMoutain]['경도']}&zoom={self.Mapzoom}&size=400x400&maptype=roadmap"
 
 
         marker_url = f"&markers=color:red%7C{ReadXML.Mountain_Data.MoutainDict[self.NowMoutain]['위도']},{ReadXML.Mountain_Data.MoutainDict[self.NowMoutain]['경도']}"
@@ -161,6 +143,21 @@ class MainGUI:
         if (self.NowMoutain):
             self.Telegram.Pass_Message(ReadXML.Mountain_Data.MoutainDict[self.NowMoutain])
 
+    def Init_All(self):                     # 초기화 하는 함수
+        self.SearchA = None
+        self.SearchM = None
+        self.Fires_Danger_Canvas.delete("all")
+        self.Listbox_Mountain.delete(0, END)
+        self.Listbox_Transport.delete(0,END)
+        self.Transport_Map_Lavel.configure(image=self.photo)
+        self.Map_Lavel.configure(image=self.photo)
+        self.Image_Lavel.configure(image=self.photo)
+        self.Transport_Map_Lavel.image = self.photo
+        self.Map_Lavel.image = self.photo
+        self.Image_Lavel.image = self.photo
+        self.Altitude_Canvas.delete('shape')
+        self.Mapzoom = 11
+        self.Transzoom = 11
 
     def __init__(self):
         self.SearchM = None  # 마운틴 검색을 저장하는 변수
@@ -169,8 +166,10 @@ class MainGUI:
         self.NowTransPort = None # 대중교통을 선택하면 저장되는 변수
         self.Telegram = Telegram_Bot.Telegram_Bot()     # 텔레그램 봇 생성
         self.Google_API_Key = 'AIzaSyCo4pAx0xdjYC6zBsVXD9uiZ3BuaSWHDLE'
-        self.Graph_height = 389 / 2000
+        self.Graph_height = 342 / 2000
         self.Graph_Width = (590-20) / 21
+        self.Mapzoom = 11
+        self.Transzoom = 11
         self.initWindow()  # tkinter 윈도우를 초기화
 
     def initWindow(self):
@@ -225,20 +224,20 @@ class MainGUI:
 
 
         # 산불위험도를 출력하는 곳
-        self.Fires_Danger_Canvas = Canvas(self.Frame1, width=220, height=220,bg = "light gray")
+        self.Fires_Danger_Canvas = Canvas(self.Frame1, width=220, height=260,bg = "light gray")
         self.Fires_Danger_Canvas.place(x=170,y=120)
 
 
         # 해발고도 그래프를 출력하는 곳
-        self.Altitude_Canvas = Canvas(self.Frame1, width=590, height=386,bg = "light gray")
-        self.Altitude_Canvas.place(x=170,y=350)
+        self.Altitude_Canvas = Canvas(self.Frame1, width=590, height=346,bg = "light gray")
+        self.Altitude_Canvas.place(x=170,y=392)
 
         # 지도를 출력하는 곳
         image = Image.open('image/Search_Nothing.jpg')
         self.photo = ImageTk.PhotoImage(image)
 
         self.Map_Lavel = Label(self.Frame1,image= self.photo)
-        self.Map_Lavel.place(x=400,y= 20,width=360,height=320)
+        self.Map_Lavel.place(x=400,y= 20,width=360,height=360)
 
         #---------------------------------------------------------------------------------------------------------------
         # Frame2 세부정보창에 대한 프레임
