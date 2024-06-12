@@ -28,12 +28,12 @@ class MainGUI:
                 if item['위치'] == self.SearchM:
                     self.Listbox_Mountain.insert(END, key)
 
-                    self.Altitude_Canvas.create_rectangle(spam.add(self.Graph_Width * i , 10) ,spam.add(self.Graph_height * (2000-eval(item['고도'])) ,20)
-                                                          ,self.Graph_Width * (i+1)+10,342 - 20,tags='shape')
-                    self.Altitude_Canvas.create_text(self.Graph_Width * i + 25,
-                                                          self.Graph_height * (2000 - eval(item['고도'])) + 10,text = item['고도'], tags='shape',font=("Arial", 6))
-                    self.Altitude_Canvas.create_text(self.Graph_Width * i + 25,
-                                                     342-10,
+                    self.Altitude_Canvas.create_rectangle(spam.add(self.Graph_Width * i , 10) ,spam.add(self.Graph_height * spam.sum(2000,eval(item['고도'])) ,20)
+                                                          ,spam.add(self.Graph_Width * spam.add(i,1),10),342 - 20,tags='shape')
+                    self.Altitude_Canvas.create_text( spam.add(self.Graph_Width * i , 25),
+                                                          self.Graph_height * spam.add(spam.sum(2000,eval(item['고도'])) , 10),text = item['고도'], tags='shape',font=("Arial", 6))
+                    self.Altitude_Canvas.create_text( spam.add(self.Graph_Width *i , 25),
+                                                     spam.sum(342,10),
                                                      text=key, tags='shape',font=("Arial", 6))
                     i += 1
         else:
@@ -49,13 +49,13 @@ class MainGUI:
             self.Listbox_Mountain.insert(END, self.SearchA)
 
             self.Altitude_Canvas.create_rectangle(10,
-                                                  self.Graph_height * (2000 - eval(ReadXML.Mountain_Data.MoutainDict[self.SearchA]['고도'])) + 20
-                                                  , self.Graph_Width + 10, 342 - 20, tags='shape')
+                                                  self.Graph_height * spam.add(spam.sum(2000 , eval(ReadXML.Mountain_Data.MoutainDict[self.SearchA]['고도'])) , 20)
+                                                  , spam.add(self.Graph_Width ,10), spam.sum(342 , 20), tags='shape')
             self.Altitude_Canvas.create_text(+ 25,
-                                             self.Graph_height * (2000 - eval(ReadXML.Mountain_Data.MoutainDict[self.SearchA]['고도'])) + 10, text=ReadXML.Mountain_Data.MoutainDict[self.SearchA]['고도'],
+                                             self.Graph_height * spam.add(spam.sum(2000 , eval(ReadXML.Mountain_Data.MoutainDict[self.SearchA]['고도'])) , 10), text=ReadXML.Mountain_Data.MoutainDict[self.SearchA]['고도'],
                                              tags='shape', font=("Arial", 6))
             self.Altitude_Canvas.create_text(+ 25,
-                                             342 - 10,
+                                             spam.sum(342 , 10),
                                              text=self.SearchA, tags='shape', font=("Arial", 6))
         else:
             self.Fires_Danger_Canvas.create_text(0, 120, text="검색 결과가 없습니다", font=("Arial", 18), anchor='w')
