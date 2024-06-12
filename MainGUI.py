@@ -9,7 +9,7 @@ import Telegram_Bot
 import requests
 import G_email
 import spam
-import multiprocessing
+import threading
 
 class MainGUI:
     def Search_Area(self):                  # 지역 검색처리하는 함수
@@ -173,8 +173,6 @@ class MainGUI:
         self.Graph_Width = (590-20) / 21
         self.initWindow()  # tkinter 윈도우를 초기화
 
-        
-
     def initWindow(self):
         self.Window = Tk()
         self.Window.title("등산가는길")
@@ -269,18 +267,18 @@ class MainGUI:
 
 
         # 텔레그램 선택 버튼
-        image1 = Image.open('image/Telegram.jpg')
-        photo = ImageTk.PhotoImage(image1)
+        self.Telegram_image = Image.open('image/Telegram.jpg')
+        self.Telegrem_photo = ImageTk.PhotoImage(self.Telegram_image)
 
-        self.Select_Telegram_Button = Button(self.Frame2,text = " 텔레그램 ",image=photo,command=self.Send_Telegram)
+        self.Select_Telegram_Button = Button(self.Frame2,text = " 텔레그램 ",image=self.Telegrem_photo,command=self.Send_Telegram)
         self.Select_Telegram_Button.place(x=350,y=140,width=100, height=80)
 
 
         # 메일 선택 버튼
-        image = Image.open('image/gmail.JPG')
-        photo1 = ImageTk.PhotoImage(image)
+        self.Gmail_image = Image.open('image/gmail.JPG')
+        self.Gmail_photo = ImageTk.PhotoImage(self.Gmail_image)
 
-        self.Select_Telegram_Button = Button(self.Frame2,text = " 메일 ",image= photo1,command= self.Send_Email)
+        self.Select_Telegram_Button = Button(self.Frame2,text = " 메일 ",image= self.Gmail_photo,command= self.Send_Email)
         self.Select_Telegram_Button.place(x=350,y=240,width=100, height=80)
 
 
@@ -297,5 +295,13 @@ class MainGUI:
         self.Image_Lavel = Label(self.Frame2, image=self.photo)
         self.Image_Lavel.place(x=500, y=380, width=265, height=360)
 
+        #self.Window.mainloop()
 
-MainGUI()
+
+maingui = MainGUI()
+
+bot_thread = threading.Thread(target=maingui.Telegram.run_telepot_bot())
+bot_thread.daemon = True  # 메인 프로그램 종료 시 함께 종료
+bot_thread.start()
+
+maingui.Window.mainloop()
